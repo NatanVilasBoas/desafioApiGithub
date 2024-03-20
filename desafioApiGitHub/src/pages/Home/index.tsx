@@ -26,7 +26,7 @@ const Home = () => {
             </form>
             <div style={{marginTop: '3rem'}}>
                 {user &&
-                    <ActionAreaCard name={user.login} image={user.avatar_url} />
+                    <ActionAreaCard  name={user.login} image={user.avatar_url} />
                 }
             </div>
         </>
