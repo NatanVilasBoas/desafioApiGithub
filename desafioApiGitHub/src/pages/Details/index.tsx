@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
-import { Box, List, ListItemButton, ListItemText, ListSubheader } from "@mui/material";
+import { Box, List, ListItemButton, ListItemText, ListSubheader, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import instance from "../../common/config/api";
 import { useUserContext } from "../../context/user";
@@ -16,16 +16,30 @@ const Details = () => {
     const { user } = useUserContext();
     const [repos, setRepos] = useState<Repo[]>([]);
     const [count, setCount] = useState(0);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
     useEffect(() => {
         const searchRepos = async () => {
-            const reposSearch = await instance.get(`/users/${id}/repos`)
-            
+            const reposSearch = await instance.get(`/users/${id}/repos`, {
+                params: {
+                    page,
+                    per_page: 10,
+                }
+            });
+
             setRepos(reposSearch.data)
             setCount(reposSearch.data.length)
+            setTotalPages(Math.ceil(reposSearch.headers["x-total-count"] / 5));
         }
         searchRepos();
 
-    }, [id])
+    }, [id, page])
+
+    const handleChangePage = (e: React.ChangeEvent<unknown>, value: number) => {
+        e.preventDefault();
+        setPage(value);
+    };
 
     return (
         <>
@@ -61,8 +75,15 @@ const Details = () => {
                         )
                     })}
                 </List>
-
-
+                <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={handleChangePage}
+                    siblingCount={1}
+                    boundaryCount={1}
+                    variant="outlined"
+                    shape="rounded"
+                />
             </Container>
         </>
     )
