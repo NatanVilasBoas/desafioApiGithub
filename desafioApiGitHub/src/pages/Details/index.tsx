@@ -1,23 +1,29 @@
 import { useParams } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
-import { Box } from "@mui/material";
-import { useEffect } from "react";
+import { Box, List, ListItemButton, ListItemText, ListSubheader } from "@mui/material";
+import { useEffect, useState } from "react";
 import instance from "../../common/config/api";
 import { useUserContext } from "../../context/user";
 
-const Details = () => {
-    const id = useParams();
-    const {user} = useUserContext();
+interface Repo {
+    id: number,
+    name: string,
+}
 
+const Details = () => {
+    const { id } = useParams();
+    const { user } = useUserContext();
+    const [repos, setRepos] = useState<Repo[]>([]);
     useEffect(() => {
         const searchRepos = async () => {
-            const repos = await instance.get(`/users/${id}/repos`)
-    
-            return repos.data;
+            const reposSearch = await instance.get(`/users/${id}/repos`)
+            console.log(reposSearch)
+
+            setRepos(reposSearch.data)
         }
-        const response = searchRepos;
-        
+        searchRepos;
+
     }, [id])
 
     return (
@@ -36,6 +42,26 @@ const Details = () => {
                 >
                     <img src={user.avatar_url} alt={user.login} />
                 </Box>
+                <List
+                    sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    subheader={
+                        <ListSubheader component="div" id="nested-list-subheader">
+                            Nested List Items
+                        </ListSubheader>
+                    }
+                >
+                    {repos.map(repo => {
+                        return (
+                            <ListItemButton>
+                                <ListItemText primary={repo.name} />
+                            </ListItemButton>
+                        )
+                    })}
+                </List>
+
+
             </Container>
         </>
     )
