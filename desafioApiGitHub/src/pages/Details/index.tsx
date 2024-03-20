@@ -15,14 +15,15 @@ const Details = () => {
     const { id } = useParams();
     const { user } = useUserContext();
     const [repos, setRepos] = useState<Repo[]>([]);
+    const [count, setCount] = useState(0);
     useEffect(() => {
         const searchRepos = async () => {
             const reposSearch = await instance.get(`/users/${id}/repos`)
-            console.log(reposSearch)
-
+            
             setRepos(reposSearch.data)
+            setCount(reposSearch.data.length)
         }
-        searchRepos;
+        searchRepos();
 
     }, [id])
 
@@ -48,13 +49,13 @@ const Details = () => {
                     aria-labelledby="nested-list-subheader"
                     subheader={
                         <ListSubheader component="div" id="nested-list-subheader">
-                            Nested List Items
+                            Repositórios: {count}
                         </ListSubheader>
                     }
                 >
                     {repos.map(repo => {
                         return (
-                            <ListItemButton>
+                            <ListItemButton key={repo.id}>
                                 <ListItemText primary={repo.name} />
                             </ListItemButton>
                         )
