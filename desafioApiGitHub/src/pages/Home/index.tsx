@@ -2,15 +2,11 @@ import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import instance from "../../common/config/api";
 import ActionAreaCard from "../../components/Card";
-
-interface User{
-    login: string,
-    avatar_url: string,
-}
+import { useUserContext } from "../../context/user";
 
 const Home = () => {
     const [search, setSearch] = useState('');
-    const [user, setUser] = useState<User | null>(null);
+    const {user, setUser} = useUserContext();
 
     const onHandleSearch = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -25,7 +21,7 @@ const Home = () => {
                 <Button onClick={(e) => onHandleSearch(e)} variant="contained">Consultar</Button>
             </form>
             <div style={{marginTop: '3rem'}}>
-                {user &&
+                {user.login &&
                     <ActionAreaCard  name={user.login} image={user.avatar_url} />
                 }
             </div>
