@@ -1,4 +1,4 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import instance from "../../common/config/api";
 import ActionAreaCard from "../../components/Card";
@@ -7,14 +7,22 @@ import { useUserContext } from "../../context/user";
 const Home = () => {
     const [search, setSearch] = useState('');
     const { user, setUser } = useUserContext();
+    const initialState = {
+        login: '',
+        avatar_url: ''
+    }
+    const [notFound, setNotFound] = useState(false);
 
     const onHandleSearch = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
+        setUser(initialState);
+        setNotFound(false);
         try{
             const response = await instance.get(`/users/${search}`);
             setUser(response.data)
         }catch(e){
             console.log('Não foi possível realizar a consulta: ', e);
+            return setNotFound(true);
         }
     }
 
@@ -27,6 +35,11 @@ const Home = () => {
                 </div>
             </form>
             <div style={{ marginTop: '3rem' }}>
+                {notFound &&
+                    <Typography gutterBottom variant="h5" component="div">
+                    Não foi possível encontrar este usuário
+                  </Typography>
+                }
                 {user.login &&
                     <ActionAreaCard name={user.login} image={user.avatar_url} />
                 }
