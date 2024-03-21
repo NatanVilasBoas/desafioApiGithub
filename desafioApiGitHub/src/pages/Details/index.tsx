@@ -24,12 +24,12 @@ const Details = () => {
             const reposSearch = await instance.get(`/users/${id}/repos`, {
                 params: {
                     page,
-                    per_page: 10,
+                    per_page: 5,
                 }
             });
-
-            setRepos(reposSearch.data)
-            setCount(reposSearch.data.length)
+            const reposSearchCount = await instance.get(`/users/${id}/repos`);
+            setRepos(reposSearch.data);
+            setCount(reposSearchCount.data.length);
             setTotalPages(Math.ceil(reposSearch.headers["x-total-count"] / 5));
         }
         searchRepos();
