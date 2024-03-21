@@ -20,19 +20,23 @@ const Details = () => {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        const searchRepos = async () => {
-            const reposSearch = await instance.get(`/users/${id}/repos`, {
-                params: {
-                    page,
-                    per_page: 5,
-                }
-            });
-            const reposSearchCount = await instance.get(`/users/${id}/repos`);
-            setRepos(reposSearch.data);
-            setCount(reposSearchCount.data.length);
-            setTotalPages(Math.ceil(reposSearch.headers["x-total-count"] / 5));
+        try{
+            const searchRepos = async () => {
+                const reposSearch = await instance.get(`/users/${id}/repos`, {
+                    params: {
+                        page,
+                        per_page: 5,
+                    }
+                });
+                const reposSearchCount = await instance.get(`/users/${id}/repos`);
+                setRepos(reposSearch.data);
+                setCount(reposSearchCount.data.length);
+                setTotalPages(Math.ceil(reposSearchCount.data.length / 5));
+            }
+            searchRepos();
+        }catch(e){
+            console.log('não foi possível realizar a consulta: ', e)
         }
-        searchRepos();
 
     }, [id, page])
 
@@ -69,9 +73,9 @@ const Details = () => {
                 >
                     {repos.map(repo => {
                         return (
-                            <a target="_blank" href={`https://github.com/${user.login}/${repo
+                            <a key={repo.id} target="_blank" href={`https://github.com/${user.login}/${repo
                             .name}`}>
-                                <ListItemButton key={repo.id}>
+                                <ListItemButton>
                                     <ListItemText primary={repo.name} />
                                 </ListItemButton>
                             </a>
