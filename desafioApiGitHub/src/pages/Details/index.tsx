@@ -20,7 +20,7 @@ const Details = () => {
     const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
-        try{
+        try {
             const searchRepos = async () => {
                 const reposSearch = await instance.get(`/users/${id}/repos`, {
                     params: {
@@ -34,7 +34,7 @@ const Details = () => {
                 setTotalPages(Math.ceil(reposSearchCount.data.length / 5));
             }
             searchRepos();
-        }catch(e){
+        } catch (e) {
             console.log('não foi possível realizar a consulta: ', e)
         }
 
@@ -73,9 +73,13 @@ const Details = () => {
                 >
                     {repos.map(repo => {
                         return (
-                            <a key={repo.id} target="_blank" href={`https://github.com/${user.login}/${repo
-                            .name}`}>
-                                <ListItemButton>
+                            <a
+                                style={{ textDecoration: 'none', color: 'black' }}
+                                key={repo.id}
+                                target="_blank"
+                                href={`https://github.com/${user.login}/${repo.name}`}
+                            >
+                                <ListItemButton style={{border: '1px solid black', marginTop: '12px'}}>
                                     <ListItemText primary={repo.name} />
                                 </ListItemButton>
                             </a>
