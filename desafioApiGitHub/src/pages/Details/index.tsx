@@ -53,10 +53,10 @@ const Details = () => {
                     alignItems="center"
                     gap={4}
                     p={2}
-                    sx={{ border: '2px solid grey' }}
                 >
                     <img src={user.avatar_url} alt={user.login} />
                 </Box>
+                <h1>{user.login}</h1>
                 <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav"
@@ -69,9 +69,12 @@ const Details = () => {
                 >
                     {repos.map(repo => {
                         return (
-                            <ListItemButton key={repo.id}>
-                                <ListItemText primary={repo.name} />
-                            </ListItemButton>
+                            <a target="_blank" href={`https://github.com/${user.login}/${repo
+                            .name}`}>
+                                <ListItemButton key={repo.id}>
+                                    <ListItemText primary={repo.name} />
+                                </ListItemButton>
+                            </a>
                         )
                     })}
                 </List>
