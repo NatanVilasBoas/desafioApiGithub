@@ -54,9 +54,9 @@ const Details = () => {
                     gap={4}
                     p={2}
                 >
-                    <img src={user.avatar_url} alt={user.login} />
+                    <img width='200px' height='200px' src={user.avatar_url} alt={user.login} />
                 </Box>
-                <h1>{user.login}</h1>
+                <h3>{user.login}</h3>
                 <List
                     sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
                     component="nav"
